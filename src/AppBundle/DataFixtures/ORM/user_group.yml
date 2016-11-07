@@ -1,0 +1,7 @@
+AppBundle\Entity\UserGroup:
+    user_group_amsterdamphp:
+        name: AmsterdamPHP
+    user_group_ddd_nl:
+        name: Domain Driven Design Nederland
+    user_group_symfony_ug_nl:
+        name: Symfony User Group - NL
