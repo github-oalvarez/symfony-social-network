@@ -1,5 +1,5 @@
-meetup-demo
-===========
+meetup-api
+==========
 
     * php bin/console doctrine:schema:create
     
