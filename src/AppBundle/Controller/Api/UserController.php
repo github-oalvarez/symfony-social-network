@@ -1,66 +1,134 @@
 <?php
-
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\Relationship;
 use AppBundle\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Form\RelationshipType;
+use AppBundle\Form\UserType;
+use AppBundle\Repository\UserRepository;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UserController extends Controller
 {
     /**
-     * @Route("/api/users", name="api_users_list")
-     * @Method("GET")
+     * @Rest\View
+     * @Rest\Get("/users")
      */
-    public function listAction()
+    public function getUsersAction()
     {
-        # TODO move to repository class
-        $users = $this->getDoctrine()
-            ->getRepository('AppBundle:User')
-            ->findAll();
-
-        $data = array('users' => array());
-        foreach ($users as $user) {
-            $data['users'][] = $this->serializeUser($user);
-        }
-
-        return new JsonResponse($data, 200);
+        return ['users' => $this->getUserRepository()->findAll()];
     }
 
     /**
-     * @Route("/api/users/{userId}")
-     * @Method("GET")
+     * @Rest\View
+     * @Rest\Get("/users/{userId}")
      */
-    public function showAction($userId)
+    public function getUserAction($userId)
     {
-        # TODO move to repository class -> S from SOLID
-        $user = $this->getDoctrine()
-            ->getRepository('AppBundle:User')
-            ->findOneBy(['id' => $userId]);
+        $user = $this->getUserRepository()->findOneBy(['id' => $userId]);
 
-        if (!$user) {
+        if (!$user instanceof User) {
             throw $this->createNotFoundException(sprintf(
                 'No user found with id "%s"',
                 $userId
             ));
         }
 
-        $data = $this->serializeUser($user);
-
-        $response = new Response(json_encode($data), 200);
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return array('user' => $user);
     }
 
-    private function serializeUser(User $user)
+    /**
+     * @Rest\View
+     * @Rest\Post("/users")
+     */
+    public function newUserAction(Request $request)
     {
-        return [
-            'name' => $user->getName(),
-            'email' => $user->getEmail(),
-        ];
+        $userManager = $this->get('fos_user.user_manager');
+        $user = $userManager->createUser();
+
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->saveUser($user);
+
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_CREATED);
+
+            $response->headers->set('Location',
+                $this->generateUrl('get_user', ['userId' => $user->getId()], true)
+            );
+
+            return $response;
+        }
+
+        return View::create($form, Response::HTTP_BAD_REQUEST);
+
+    }
+
+    /**
+     * @Rest\View
+     * @Rest\Get("/users/{userId}/connections")
+     */
+    public function getUserConnectionsAction($userId)
+    {
+        # TODO move to repository class -> S from SOLID
+        $user = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->findOneBy(['id' => $userId]);
+
+        return ['connections' => $user->getConnections()];
+    }
+
+    /**
+     * @Rest\View
+     * @Rest\Post("/users/{userId}/connections")
+     */
+    public function newUserConnection(Request $request)
+    {
+        $relationship = new Relationship();
+
+        $form = $this->createForm(RelationshipType::class, $relationship);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->saveRelationship($relationship);
+
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_CREATED);
+
+            $response->headers->set('Location',
+                $this->generateUrl('get_user_connections', ['userId' => $relationship->getUser()->getId()], true)
+            );
+
+            return $response;
+        }
+
+        return View::create($form, Response::HTTP_BAD_REQUEST);
+    }
+
+    private function getUserRepository(): UserRepository
+    {
+        return $this->get('user_repository');
+    }
+
+    private function saveUser($user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+    }
+
+    private function saveRelationship($relationship)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($relationship);
+        $em->flush();
     }
 }

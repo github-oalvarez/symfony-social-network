@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table("users")
  */
 class User implements UserInterface
@@ -22,16 +22,20 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      */
     private $password;
 
@@ -123,6 +127,11 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+    }
+
     public function getPassword()
     {
         return $this->password;
@@ -182,6 +191,11 @@ class User implements UserInterface
     public function addRelationshipWithMe(Relationship $relationship)
     {
         $this->connectionsWithMe->add($relationship);
+    }
+
+    public function hasConnection(User $user)
+    {
+        $user->connections->contains($user);
     }
 
     public function addConnection(User $friend)

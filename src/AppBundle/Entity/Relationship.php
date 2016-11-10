@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
+ * @ORM\Table("relationships")
  */
 class Relationship
 {
@@ -19,13 +20,11 @@ class Relationship
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="connections")
-     * @ORM\Id
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="connectionsWithMe")
-     * @ORM\Id
      */
     private $connection;
 
