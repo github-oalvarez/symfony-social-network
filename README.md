@@ -7,4 +7,4 @@ meetup-api
 
     * Run your application:
         1. Execute the php bin/console server:start command.
-        2. Browse to the http://localhost:8000 URL.
+        2. Browse to http://127.0.0.1:8000/users
