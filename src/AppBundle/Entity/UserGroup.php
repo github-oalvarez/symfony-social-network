@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  */
-class UserGroup
+final class UserGroup
 {
     /**
      * @ORM\Column(type="integer")

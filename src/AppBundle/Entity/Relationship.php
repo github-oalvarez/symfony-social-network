@@ -2,14 +2,16 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table("relationships")
+ * @UniqueEntity(fields = {"user", "connection"})
  */
-class Relationship
+final class Relationship
 {
     /**
      * @ORM\Column(type="integer")
@@ -38,6 +40,11 @@ class Relationship
         $this->accepted = false;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getUser()
     {
         return $this->user;
@@ -61,13 +68,5 @@ class Relationship
     public function hasAccepted()
     {
         return $this->accepted === true;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

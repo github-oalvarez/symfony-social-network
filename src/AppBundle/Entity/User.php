@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table("users")
  */
-class User implements UserInterface
+final class User implements UserInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -182,29 +182,9 @@ class User implements UserInterface
         return $this->connectionsWithMe->getValues();
     }
 
-    public function addRelationship(Relationship $relationship)
-    {
-        $this->connections->add($relationship);
-        $this->addRelationshipWithMe($relationship);
-    }
-
-    public function addRelationshipWithMe(Relationship $relationship)
-    {
-        $this->connectionsWithMe->add($relationship);
-    }
-
     public function hasConnection(User $user)
     {
         $user->connections->contains($user);
-    }
-
-    public function addConnection(User $friend)
-    {
-        $relationship = new Relationship();
-        $relationship->setUser($this);
-        $relationship->setConnection($friend);
-
-        $this->addRelationship($relationship);
     }
 
     public function getUserGroups()

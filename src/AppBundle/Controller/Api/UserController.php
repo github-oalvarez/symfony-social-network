@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use AppBundle\Form\RelationshipType;
 use AppBundle\Form\UserType;
 use AppBundle\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -77,7 +78,6 @@ final class UserController extends Controller
      */
     public function getUserConnectionsAction($userId)
     {
-        # TODO move to repository class -> S from SOLID
         $user = $this->getDoctrine()
             ->getRepository('AppBundle:User')
             ->findOneBy(['id' => $userId]);
@@ -118,16 +118,21 @@ final class UserController extends Controller
         return $this->get('user_repository');
     }
 
+    private function getEntityManager(): EntityManager
+    {
+        return $this->get('doctrine.orm.entity_manager');
+    }
+
     private function saveUser($user)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         $em->persist($user);
         $em->flush();
     }
 
     private function saveRelationship($relationship)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         $em->persist($relationship);
         $em->flush();
     }

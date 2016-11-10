@@ -61,7 +61,8 @@ final class UserControllerTest extends \PHPUnit_Framework_TestCase
 
         $data = [
             'relationship' => [
-                'user' => $connectionId
+                'user' => $userId,
+                'connection' => $connectionId
             ]
         ];
 

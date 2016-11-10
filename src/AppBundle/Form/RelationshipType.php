@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RelationshipType extends AbstractType
+final class RelationshipType extends AbstractType
 {
     /**
      * {@inheritdoc}
