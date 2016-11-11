@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table("relationships")
  * @UniqueEntity(fields = {"user", "connection"})
  */
-final class Relationship
+class Relationship
 {
     /**
      * @ORM\Column(type="integer")
