@@ -5,3 +5,7 @@ php:
 
 before_script:
     - composer install
+    - rm app/data/meetup.sqlite
+    - bin/console doctrine:schema:create
+    - echo y | bin/console fixtures:load
+    - bin/console server:start
