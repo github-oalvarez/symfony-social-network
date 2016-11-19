@@ -4,7 +4,7 @@ namespace AppBundle\Tests\Controller\User;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ListControllerTest extends \PHPUnit_Framework_TestCase
+final class DetailsControllerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Client
