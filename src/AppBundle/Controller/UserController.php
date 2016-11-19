@@ -9,49 +9,62 @@ use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\UserBundle\Doctrine\UserManager;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\RouterInterface;
 
-final class UserController extends Controller
+final class UserController
 {
     /**
-     * @Rest\View
-     * @Rest\Get("/users")
+     * @var UserRepository
      */
-    public function getUsersAction()
-    {
-        return ['users' => $this->getUserRepository()->findAll()];
+    private $userRepository;
+
+    /**
+     * @var UserManager
+     */
+    private $userManager;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    public function __construct(
+        UserRepository $userRepository,
+        UserManager $userManager,
+        FormFactoryInterface $formFactory,
+        EntityManager $entityManager,
+        RouterInterface $router
+    ) {
+        $this->userRepository = $userRepository;
+        $this->userManager = $userManager;
+        $this->formFactory = $formFactory;
+        $this->entityManager = $entityManager;
+        $this->router = $router;
     }
 
     /**
      * @Rest\View
-     * @Rest\Get("/users/{userId}")
-     */
-    public function getUserAction($userId)
-    {
-        $user = $this->getUserRepository()->findOneBy(['id' => $userId]);
-
-        if (!$user instanceof User) {
-            throw $this->createNotFoundException(sprintf(
-                'No user found with id "%s"',
-                $userId
-            ));
-        }
-
-        return array('user' => $user);
-    }
-
-    /**
-     * @Rest\View
-     * @Rest\Post("/users")
      */
     public function newUserAction(Request $request)
     {
-        $userManager = $this->get('fos_user.user_manager');
-        $user = $userManager->createUser();
+        $user = $this->userManager->createUser();
 
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->formFactory->create(UserType::class, $user);
 
         $form->handleRequest($request);
 
@@ -62,7 +75,7 @@ final class UserController extends Controller
             $response->setStatusCode(Response::HTTP_CREATED);
 
             $response->headers->set('Location',
-                $this->generateUrl('get_user', ['userId' => $user->getId()], true)
+                $this->router->generate('get_user', ['userId' => $user->getId()], true)
             );
 
             return $response;
@@ -78,7 +91,7 @@ final class UserController extends Controller
      */
     public function getUserConnectionsAction($userId)
     {
-        $user = $this->getDoctrine()
+        $user = $this->entityManager
             ->getRepository('AppBundle:User')
             ->findOneBy(['id' => $userId]);
 
@@ -93,7 +106,7 @@ final class UserController extends Controller
     {
         $relationship = new Relationship();
 
-        $form = $this->createForm(RelationshipType::class, $relationship);
+        $form = $this->formFactory->create(RelationshipType::class, $relationship);
 
         $form->handleRequest($request);
 
@@ -104,7 +117,7 @@ final class UserController extends Controller
             $response->setStatusCode(Response::HTTP_CREATED);
 
             $response->headers->set('Location',
-                $this->generateUrl('get_user_connections', ['userId' => $relationship->getUser()->getId()], true)
+                $this->router->generate('get_user_connections', ['userId' => $relationship->getUser()->getId()], true)
             );
 
             return $response;
@@ -113,27 +126,15 @@ final class UserController extends Controller
         return View::create($form, Response::HTTP_BAD_REQUEST);
     }
 
-    private function getUserRepository(): UserRepository
-    {
-        return $this->get('user_repository');
-    }
-
-    private function getEntityManager(): EntityManager
-    {
-        return $this->get('doctrine.orm.entity_manager');
-    }
-
     private function saveUser($user)
     {
-        $em = $this->getEntityManager();
-        $em->persist($user);
-        $em->flush();
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 
     private function saveRelationship($relationship)
     {
-        $em = $this->getEntityManager();
-        $em->persist($relationship);
-        $em->flush();
+        $this->entityManager->persist($relationship);
+        $this->entityManager->flush();
     }
 }

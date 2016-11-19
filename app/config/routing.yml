@@ -1,7 +1,11 @@
-app:
-    resource: "@AppBundle/Controller"
-    type: annotation
+user_list:
+    path: /users
+    defaults: { _controller: user_controller.list:getAction }
 
-users:
-    type:     rest
-    resource: AppBundle\Controller\UserController
+user_details:
+    path: /users/{userId}
+    defaults: { _controller: user_controller.details:getAction }
+
+user_create:
+    path: /users
+    defaults: { _controller: user_controller:newUserAction }

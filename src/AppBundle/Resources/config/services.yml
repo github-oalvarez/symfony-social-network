@@ -2,10 +2,24 @@ services:
     user_controller:
         class: AppBundle\Controller\UserController
         arguments:
-            - "@user_repository"
+            - '@user_repository'
+            - '@fos_user.user_manager'
+            - '@form.factory'
+            - '@doctrine.orm.entity_manager'
+            - '@router'
+
+    user_controller.list:
+        class: AppBundle\Controller\User\ListController
+        arguments:
+            - '@user_repository'
+
+    user_controller.details:
+        class: AppBundle\Controller\User\DetailsController
+        arguments:
+            - '@user_repository'
 
     user_repository:
         class: AppBundle\Repository\UserRepository
-        factory: ["@doctrine.orm.entity_manager", getRepository]
+        factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments:
             - AppBundle\Entity\User
