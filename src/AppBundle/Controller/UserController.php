@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Controller\Api;
+namespace AppBundle\Controller;
 
 use AppBundle\Entity\Relationship;
 use AppBundle\Entity\User;

@@ -50,28 +50,14 @@ class User implements UserInterface
     private $connections;
 
     /**
-     * @ORM\OneToMany(targetEntity="Relationship", mappedBy="connection")
-     */
-    private $connectionsWithMe;
-
-    /**
      * @ORM\ManyToMany(targetEntity="UserGroup", inversedBy="users")
-     * @ORM\JoinTable(
-     *  name="user_usergroup",
-     *  joinColumns={
-     *      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     *  },
-     *  inverseJoinColumns={
-     *      @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id")
-     *  }
-     * )
+     * @ORM\JoinTable(name="users_usergroups")
      */
     private $userGroups;
 
     public function __construct()
     {
         $this->connections = new ArrayCollection();
-        $this->connectionsWithMe = new ArrayCollection();
         $this->userGroups = new ArrayCollection();
     }
 
@@ -175,11 +161,6 @@ class User implements UserInterface
     public function getConnections()
     {
         return $this->connections->getValues();
-    }
-
-    public function getConnectionsWithMe()
-    {
-        return $this->connectionsWithMe->getValues();
     }
 
     public function hasConnection(User $user)

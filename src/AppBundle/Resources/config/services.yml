@@ -1,6 +1,6 @@
 services:
     user_controller:
-        class: AppBundle\Controller\Api\UserController
+        class: AppBundle\Controller\UserController
         arguments:
             - "@user_repository"
 

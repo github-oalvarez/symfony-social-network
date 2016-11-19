@@ -2,31 +2,24 @@
 
 namespace AppBundle\Entity;
 
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table("relationships")
- * @UniqueEntity(fields = {"user", "connection"})
  */
 class Relationship
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="connections")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="user")
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="connectionsWithMe")
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="connections")
      */
     private $connection;
 
@@ -38,11 +31,6 @@ class Relationship
     public function __construct()
     {
         $this->accepted = false;
-    }
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getUser()

@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Tests\Controller\Api;
+namespace AppBundle\Tests\Controller;
 
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Response;
