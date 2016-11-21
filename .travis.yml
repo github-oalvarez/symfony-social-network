@@ -1,6 +1,6 @@
 language: php
 
-php: 7
+php: 7.0
 
 before_install:
   - phpenv config-rm xdebug.ini || true
@@ -14,7 +14,7 @@ install:
   - echo y | bin/console fixtures:load
   - bin/console server:start
 
-script: vendor/bin/phpunit
+script: phpunit --configuration phpunit.xml --coverage-text
 
 notifications:
   on_success: never
