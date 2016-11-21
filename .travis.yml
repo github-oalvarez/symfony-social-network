@@ -1,12 +1,15 @@
 language: php
 
-php:
-  - '7.0'
+php: 7
 
-before_script:
-    - mkdir app/data
-    - cp app/config/parameters.yml.dist app/config/parameters.yml
-    - composer install
-    - bin/console doctrine:schema:create
-    - echo y | bin/console fixtures:load
-    - bin/console server:start
+before_install:
+  - phpenv config-rm xdebug.ini || true
+  - composer self-update
+  - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - mkdir app/data
+  - bin/console doctrine:schema:create
+  - echo y | bin/console fixtures:load
+  - bin/console server:start
+
+install:
+  - composer install
