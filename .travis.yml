@@ -14,7 +14,7 @@ install:
   - echo y | bin/console fixtures:load
   - bin/console server:start
 
-script: phpunit --configuration phpunit.xml.dist --coverage-text
+script: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
 
 notifications:
   on_success: never
