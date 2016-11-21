@@ -7,9 +7,9 @@ before_install:
   - composer self-update
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - mkdir app/data
-  - bin/console doctrine:schema:create
-  - echo y | bin/console fixtures:load
-  - bin/console server:start
 
 install:
   - composer install
+  - bin/console doctrine:schema:create
+  - echo y | bin/console fixtures:load
+  - bin/console server:start
