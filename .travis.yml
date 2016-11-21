@@ -13,3 +13,9 @@ install:
   - bin/console doctrine:schema:create
   - echo y | bin/console fixtures:load
   - bin/console server:start
+
+script: vendor/bin/phpunit
+
+notifications:
+  on_success: never
+  on_failure: never
