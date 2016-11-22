@@ -11,13 +11,7 @@ before_script:
 
 script: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
 
-after_script:
-  - bin/console server:stop
-
-cache:
-  directories:
-- $HOME/.composer/cache
+after_script: bin/console server:stop
 
 notifications:
-  on_success: never
-  on_failure: never
+  email: false
