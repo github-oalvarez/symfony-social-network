@@ -2,17 +2,21 @@ language: php
 
 php: 7.0
 
-before_install:
+before_script:
   - composer self-update
-  - cp app/config/parameters.yml.dist app/config/parameters.yml
-
-install:
   - composer install
   - bin/console doctrine:schema:create
   - echo y | bin/console fixtures:load
   - bin/console server:start
 
 script: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
+
+after_script:
+  - bin/console server:stop
+
+cache:
+  directories:
+- $HOME/.composer/cache
 
 notifications:
   on_success: never
