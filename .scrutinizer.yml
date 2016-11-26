@@ -2,6 +2,7 @@ filter:
     excluded_paths:
         - 'app/*'
         - 'bin/*'
+        - 'src/AppBundle/Tests/*'
 checks:
     php: true
 coding_style:
