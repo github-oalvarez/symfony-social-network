@@ -5,7 +5,6 @@ use AppBundle\Controller\BaseController;
 use AppBundle\Form\UserType;
 use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\UserBundle\Doctrine\UserManager;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Form\FormFactoryInterface;

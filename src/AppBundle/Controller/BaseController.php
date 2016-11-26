@@ -16,12 +16,12 @@ abstract class BaseController
         $this->serializer = $serializer;
     }
 
-    protected function createApiResponse($data, $statusCode = 200)
+    protected function createApiResponse($data, $statusCode = Response::HTTP_OK)
     {
         $json = $this->serialize($data);
-        return new Response($json, $statusCode, array(
+        return new Response($json, $statusCode, [
             'Content-Type' => 'application/json'
-        ));
+        ]);
     }
 
     protected function serialize($data, $format = 'json')

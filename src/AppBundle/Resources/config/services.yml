@@ -1,19 +1,11 @@
 services:
     # controllers
-    user_controller:
-        class: AppBundle\Controller\UserController
-        arguments:
-            - '@user_repository'
-            - '@fos_user.user_manager'
-            - '@form.factory'
-            - '@doctrine.orm.entity_manager'
-            - '@router'
-
     user_controller.list:
         class: AppBundle\Controller\User\ListController
         arguments:
             - '@jms_serializer'
             - '@user_repository'
+            - '@router'
 
     user_controller.details:
         class: AppBundle\Controller\User\DetailsController

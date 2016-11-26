@@ -18,10 +18,20 @@ final class PaginatedCollection
      */
     private $count;
 
+    /**
+     * @var array
+     */
+    private $_links = [];
+
     public function __construct(array $items, $totalItems)
     {
         $this->items = $items;
         $this->total = $totalItems;
         $this->count = count($items);
+    }
+
+    public function addLink($ref, $url)
+    {
+        $this->_links[$ref] = $url;
     }
 }

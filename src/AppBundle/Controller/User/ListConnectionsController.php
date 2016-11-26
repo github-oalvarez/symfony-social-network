@@ -4,7 +4,6 @@ namespace AppBundle\Controller\User;
 use AppBundle\Controller\BaseController;
 use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
