@@ -2,12 +2,14 @@
 namespace AppBundle\Controller\User;
 
 use AppBundle\Controller\BaseController;
+use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use FOS\UserBundle\Doctrine\UserManager;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -57,27 +59,28 @@ final class CreateController extends BaseController
 
     public function postAction(Request $request)
     {
-        $user = $this->userManager->createUser();
-
+        $user = new User();
         $form = $this->formFactory->create(UserType::class, $user);
+        $this->processForm($request, $form);
 
-        $form->handleRequest($request);
+        $this->managerRegistry->getManager()->persist($user);
+        $this->managerRegistry->getManager()->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->managerRegistry->getManager()->persist($user);
-            $this->managerRegistry->getManager()->flush();
+        $response = $this->createApiResponse($user, Response::HTTP_CREATED);
 
-            $response = $this->createApiResponse($user, Response::HTTP_CREATED);
+        $userUrl = $this->urlGenerator->generate(
+            'user_list',
+            ['userId' => $user->getId()]
+        );
+        $response->headers->set('Location', $userUrl);
 
-            $userUrl = $this->urlGenerator->generate(
-                'user_list',
-                ['userId' => $user->getId()]
-            );
-            $response->headers->set('Location', $userUrl);
+        return $response;
+    }
 
-            return $response;
-        }
-
-        return $this->createApiResponse($form, Response::HTTP_BAD_REQUEST);
+    private function processForm(Request $request, FormInterface $form)
+    {
+        $data = json_decode($request->getContent(), true);
+        $clearMissing = $request->getMethod() != 'PATCH';
+        $form->submit($data, $clearMissing);
     }
 }
