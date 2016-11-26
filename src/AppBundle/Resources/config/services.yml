@@ -1,4 +1,5 @@
 services:
+    # controllers
     user_controller:
         class: AppBundle\Controller\UserController
         arguments:
@@ -18,6 +19,16 @@ services:
         arguments:
             - '@user_repository'
 
+    user_controller.create:
+        class: AppBundle\Controller\User\CreateController
+        arguments:
+            - '@user_repository'
+            - '@fos_user.user_manager'
+            - '@form.factory'
+            - '@doctrine.orm.entity_manager'
+            - '@router'
+
+    # repositories
     user_repository:
         class: AppBundle\Repository\UserRepository
         factory: ['@doctrine.orm.entity_manager', getRepository]

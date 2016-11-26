@@ -1,9 +1,7 @@
 <?php
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\User;
 
-use AppBundle\Entity\Relationship;
-use AppBundle\Entity\User;
-use AppBundle\Form\RelationshipType;
+use AppBundle\Form\UserType;
 use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -12,9 +10,9 @@ use FOS\UserBundle\Doctrine\UserManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class UserController
+final class CreateController
 {
     /**
      * @var UserRepository
@@ -37,68 +35,49 @@ final class UserController
     private $entityManager;
 
     /**
-     * @var RouterInterface
+     * @var UrlGeneratorInterface
      */
-    private $router;
+    private $urlGenerator;
 
     public function __construct(
         UserRepository $userRepository,
         UserManager $userManager,
         FormFactoryInterface $formFactory,
         EntityManager $entityManager,
-        RouterInterface $router
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->userRepository = $userRepository;
         $this->userManager = $userManager;
         $this->formFactory = $formFactory;
         $this->entityManager = $entityManager;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
      * @Rest\View
-     * @Rest\Get("/users/{userId}/connections")
      */
-    public function getUserConnectionsAction($userId)
+    public function postAction(Request $request)
     {
-        $user = $this->entityManager
-            ->getRepository('AppBundle:User')
-            ->findOneBy(['id' => $userId]);
+        $user = $this->userManager->createUser();
 
-        return ['connections' => $user->getConnections()];
-    }
-
-    /**
-     * @Rest\View
-     * @Rest\Post("/users/{userId}/connections")
-     */
-    public function newUserConnection(Request $request)
-    {
-        $relationship = new Relationship();
-
-        $form = $this->formFactory->create(RelationshipType::class, $relationship);
+        $form = $this->formFactory->create(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->saveRelationship($relationship);
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
 
             $response = new Response();
             $response->setStatusCode(Response::HTTP_CREATED);
 
             $response->headers->set('Location',
-                $this->router->generate('get_user_connections', ['userId' => $relationship->getUser()->getId()], true)
+                $this->urlGenerator->generate('user_list', ['userId' => $user->getId()], true)
             );
 
             return $response;
         }
 
         return View::create($form, Response::HTTP_BAD_REQUEST);
-    }
-
-    private function saveRelationship($relationship)
-    {
-        $this->entityManager->persist($relationship);
-        $this->entityManager->flush();
     }
 }

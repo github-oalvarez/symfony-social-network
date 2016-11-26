@@ -1,5 +1,6 @@
 user_list:
     path: /users
+    methods: GET
     defaults: { _controller: user_controller.list:getAction }
 
 user_details:
@@ -8,4 +9,5 @@ user_details:
 
 user_create:
     path: /users
-    defaults: { _controller: user_controller:newUserAction }
+    methods: POST
+    defaults: { _controller: user_controller.create:postAction }
