@@ -1,4 +1,12 @@
+filter:
+    excluded_paths:
+        - 'app/*'
+        - 'bin/*'
 checks:
-    php:
-        code_rating: true
-        duplication: true
+    php: true
+coding_style:
+    php: {  }
+tools:
+    external_code_coverage:
+        timeout: 600
+        runs: 3
