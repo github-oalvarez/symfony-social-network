@@ -45,7 +45,7 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @ORM\OneToMany(targetEntity="Relationship", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Friendship", mappedBy="user")
      */
     private $connections;
 

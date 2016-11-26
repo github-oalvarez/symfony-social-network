@@ -1,9 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Friendship;
 use AppBundle\Entity\Relationship;
 use AppBundle\Entity\User;
-use AppBundle\Form\RelationshipType;
+use AppBundle\Form\FriendshipType;
 use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -82,20 +83,20 @@ final class UserController
      */
     public function newUserConnection(Request $request)
     {
-        $relationship = new Relationship();
+        $friendship = new Friendship();
 
-        $form = $this->formFactory->create(RelationshipType::class, $relationship);
+        $form = $this->formFactory->create(FriendshipType::class, $friendship);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->saveRelationship($relationship);
+            $this->saveFriendship($friendship);
 
             $response = new Response();
             $response->setStatusCode(Response::HTTP_CREATED);
 
             $response->headers->set('Location',
-                $this->router->generate('get_user_connections', ['userId' => $relationship->getUser()->getId()], true)
+                $this->router->generate('get_user_connections', ['userId' => $friendship->getUser()->getId()], true)
             );
 
             return $response;
@@ -104,9 +105,9 @@ final class UserController
         return View::create($form, Response::HTTP_BAD_REQUEST);
     }
 
-    private function saveRelationship($relationship)
+    private function saveFriendship($friendship)
     {
-        $this->managerRegistry->getManager()->persist($relationship);
+        $this->managerRegistry->getManager()->persist($friendship);
         $this->managerRegistry->getManager()->flush();
     }
 }

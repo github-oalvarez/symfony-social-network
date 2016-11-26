@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class RelationshipType extends AbstractType
+final class FriendshipType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -25,7 +25,7 @@ final class RelationshipType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\Relationship',
+            'data_class' => 'AppBundle\Entity\Friendship',
             'csrf_protection' => false,
         ]);
     }

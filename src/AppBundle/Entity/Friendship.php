@@ -7,9 +7,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table("relationships")
+ * @ORM\Table("friendships")
  */
-class Relationship
+class Friendship
 {
     /**
      * @ORM\Id
