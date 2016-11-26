@@ -9,9 +9,12 @@ before_script:
   - echo y | bin/console fixtures:load --env=test
   - bin/console server:start
 
-script: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text
+script: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text --coverage-clover=coverage.clover
 
-after_script: bin/console server:stop
+after_script:
+  - bin/console server:stop
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
 notifications:
   email: false
