@@ -13,5 +13,5 @@
 /var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-/app/data/meetup.sqlite
+/app/data/
 /web/config.php

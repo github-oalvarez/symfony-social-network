@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Tests\Controller\User;
 
-use AppBundle\Tests\Controller\TestBase;
+use AppBundle\Tests\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CreateControllerTest extends TestBase
+final class CreateControllerTest extends ApiTestCase
 {
     public function testPost()
     {

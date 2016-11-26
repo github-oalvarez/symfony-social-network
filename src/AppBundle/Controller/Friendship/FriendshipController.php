@@ -1,8 +1,7 @@
 <?php
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Friendship;
 
 use AppBundle\Entity\Friendship;
-use AppBundle\Entity\Relationship;
 use AppBundle\Entity\User;
 use AppBundle\Form\FriendshipType;
 use AppBundle\Repository\UserRepository;
@@ -13,9 +12,9 @@ use FOS\UserBundle\Doctrine\UserManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class UserController
+final class FriendshipController
 {
     /**
      * @var UserRepository
@@ -38,30 +37,22 @@ final class UserController
     private $managerRegistry;
 
     /**
-     * @var RouterInterface
+     * @var UrlGeneratorInterface
      */
-    private $router;
+    private $urlGenerator;
 
-    /**
-     * UserController constructor.
-     * @param UserRepository $userRepository
-     * @param UserManager $userManager
-     * @param FormFactoryInterface $formFactory
-     * @param ManagerRegistry $managerRegistry
-     * @param RouterInterface $router
-     */
     public function __construct(
         UserRepository $userRepository,
         UserManager $userManager,
         FormFactoryInterface $formFactory,
         ManagerRegistry $managerRegistry,
-        RouterInterface $router
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->userRepository = $userRepository;
         $this->userManager = $userManager;
         $this->formFactory = $formFactory;
         $this->managerRegistry = $managerRegistry;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -96,7 +87,7 @@ final class UserController
             $response->setStatusCode(Response::HTTP_CREATED);
 
             $response->headers->set('Location',
-                $this->router->generate('get_user_connections', ['userId' => $friendship->getUser()->getId()], true)
+                $this->urlGenerator->generate('get_user_connections', ['userId' => $friendship->getUser()->getId()], true)
             );
 
             return $response;
@@ -105,7 +96,7 @@ final class UserController
         return View::create($form, Response::HTTP_BAD_REQUEST);
     }
 
-    private function saveFriendship($friendship)
+    private function saveFriendship(Friendship $friendship)
     {
         $this->managerRegistry->getManager()->persist($friendship);
         $this->managerRegistry->getManager()->flush();
