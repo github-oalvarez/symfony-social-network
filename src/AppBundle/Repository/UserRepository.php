@@ -72,4 +72,9 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     {
         return $class === 'AppBundle\Entity\User';
     }
+
+    public function findAllQueryBuilder()
+    {
+        return $this->createQueryBuilder('user');
+    }
 }

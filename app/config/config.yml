@@ -65,15 +65,6 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-fos_rest:
-    routing_loader:
-        default_format: json
-    format_listener:
-        rules:
-            - { priorities: ['json'], fallback_format: json, prefer_extension: false }
-    view:
-        view_response_listener: true
-
 fos_user:
     db_driver: orm
     firewall_name: main

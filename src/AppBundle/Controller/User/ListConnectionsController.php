@@ -1,11 +1,14 @@
 <?php
 namespace AppBundle\Controller\User;
 
+use AppBundle\Controller\BaseController;
 use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use JMS\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
-final class ListConnectionsController
+final class ListConnectionsController extends BaseController
 {
     /**
      * @var UserRepository
@@ -17,22 +20,19 @@ final class ListConnectionsController
      */
     private $managerRegistry;
 
-    public function __construct(UserRepository $userRepository, ManagerRegistry $managerRegistry)
+    public function __construct(SerializerInterface $serializer, UserRepository $userRepository, ManagerRegistry $managerRegistry)
     {
+        parent::__construct($serializer);
         $this->userRepository = $userRepository;
         $this->managerRegistry = $managerRegistry;
     }
 
-    /**
-     * @Rest\View
-     * @Rest\Get("/users/{userId}/connections")
-     */
     public function getUserConnectionsAction($userId)
     {
         $user = $this->managerRegistry->getManager()
             ->getRepository('AppBundle:User')
             ->findOneBy(['id' => $userId]);
 
-        return ['connections' => $user->getConnections()];
+        return $this->createApiResponse(['connections' => $user->getConnections()], Response::HTTP_OK);
     }
 }

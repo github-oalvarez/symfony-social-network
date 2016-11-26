@@ -1,19 +1,19 @@
 <?php
 namespace AppBundle\Controller\User;
 
+use AppBundle\Controller\BaseController;
 use AppBundle\Form\UserType;
 use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
 use FOS\UserBundle\Doctrine\UserManager;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CreateController
+final class CreateController extends BaseController
 {
     /**
      * @var UserRepository
@@ -41,12 +41,14 @@ final class CreateController
     private $urlGenerator;
 
     public function __construct(
+        SerializerInterface $serializer,
         UserRepository $userRepository,
         UserManager $userManager,
         FormFactoryInterface $formFactory,
         ManagerRegistry $managerRegistry,
         UrlGeneratorInterface $urlGenerator
     ) {
+        parent::__construct($serializer);
         $this->userRepository = $userRepository;
         $this->userManager = $userManager;
         $this->formFactory = $formFactory;
@@ -54,9 +56,6 @@ final class CreateController
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @Rest\View
-     */
     public function postAction(Request $request)
     {
         $user = $this->userManager->createUser();
@@ -69,16 +68,17 @@ final class CreateController
             $this->managerRegistry->getManager()->persist($user);
             $this->managerRegistry->getManager()->flush();
 
-            $response = new Response();
-            $response->setStatusCode(Response::HTTP_CREATED);
+            $response = $this->createApiResponse($user, Response::HTTP_CREATED);
 
-            $response->headers->set('Location',
-                $this->urlGenerator->generate('user_list', ['userId' => $user->getId()], true)
+            $userUrl = $this->urlGenerator->generate(
+                'user_list',
+                ['userId' => $user->getId()]
             );
+            $response->headers->set('Location', $userUrl);
 
             return $response;
         }
 
-        return View::create($form, Response::HTTP_BAD_REQUEST);
+        return $this->createApiResponse($form, Response::HTTP_BAD_REQUEST);
     }
 }

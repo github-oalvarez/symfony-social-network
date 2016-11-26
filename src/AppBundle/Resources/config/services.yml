@@ -12,16 +12,19 @@ services:
     user_controller.list:
         class: AppBundle\Controller\User\ListController
         arguments:
+            - '@jms_serializer'
             - '@user_repository'
 
     user_controller.details:
         class: AppBundle\Controller\User\DetailsController
         arguments:
+            - '@jms_serializer'
             - '@user_repository'
 
     user_controller.create:
         class: AppBundle\Controller\User\CreateController
         arguments:
+            - '@jms_serializer'
             - '@user_repository'
             - '@fos_user.user_manager'
             - '@form.factory'

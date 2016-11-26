@@ -1,26 +1,27 @@
 <?php
 namespace AppBundle\Controller\User;
 
+use AppBundle\Controller\BaseController;
 use AppBundle\Entity\User;
 use AppBundle\Repository\UserRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use JMS\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class DetailsController
+final class DetailsController extends BaseController
 {
     /**
      * @var UserRepository
      */
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(SerializerInterface $serializer, UserRepository $userRepository)
     {
+        parent::__construct($serializer);
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * @Rest\View
-     */
     public function getAction($userId)
     {
         $user = $this->userRepository->findOneBy(['id' => $userId]);
@@ -32,6 +33,6 @@ final class DetailsController
             ));
         }
 
-        return array('user' => $user);
+        return $this->createApiResponse(['user' => $user], Response::HTTP_OK);
     }
 }
