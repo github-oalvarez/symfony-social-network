@@ -21,7 +21,7 @@ class ApiTestCase extends KernelTestCase
     /**
      * @var array
      */
-    private static $history = array();
+    private static $history = [];
 
     /**
      * @var Client
@@ -31,7 +31,7 @@ class ApiTestCase extends KernelTestCase
     /**
      * @var ConsoleOutput
      */
-    private $output;
+    private $consoleOutput;
 
     /**
      * @var FormatterHelper
@@ -55,13 +55,8 @@ class ApiTestCase extends KernelTestCase
             return $request->withUri($uri);
         }));
 
-        $baseUrl = getenv('TEST_BASE_URL');
-
-        if ($baseUrl) {
-
-        }
         self::$staticClient = new Client([
-            'base_uri' => $baseUrl,
+            'base_uri' => getenv('TEST_BASE_URL'),
             'http_errors' => false,
             'handler' => $handler
         ]);
@@ -73,7 +68,7 @@ class ApiTestCase extends KernelTestCase
     {
         $this->client = self::$staticClient;
         // reset the history
-        self::$history = array();
+        self::$history = [];
 
         $this->purgeDatabase();
     }
@@ -160,7 +155,7 @@ class ApiTestCase extends KernelTestCase
                 }
 
                 // finds the h1 and h2 tags and prints them only
-                foreach ($crawler->filter('h1, h2')->extract(array('_text')) as $header) {
+                foreach ($crawler->filter('h1, h2')->extract(['_text']) as $header) {
                     // avoid these meaningless headers
                     if (strpos($header, 'Stack Trace') !== false) {
                         continue;
@@ -182,7 +177,7 @@ class ApiTestCase extends KernelTestCase
                 }
 
                 $profilerUrl = $response->getHeader('X-Debug-Token-Link');
-                if ($profilerUrl) {
+                if (!empty($profilerUrl)) {
                     $fullProfilerUrl = $response->getHeader('Host').$profilerUrl[0];
                     $this->printDebug('');
                     $this->printDebug(sprintf(
@@ -206,11 +201,11 @@ class ApiTestCase extends KernelTestCase
      */
     protected function printDebug($string)
     {
-        if ($this->output === null) {
-            $this->output = new ConsoleOutput();
+        if ($this->consoleOutput === null) {
+            $this->consoleOutput = new ConsoleOutput();
         }
 
-        $this->output->writeln($string);
+        $this->consoleOutput->writeln($string);
     }
 
     /**
@@ -228,12 +223,9 @@ class ApiTestCase extends KernelTestCase
         $this->printDebug($output);
     }
 
-    /**
-     * @return RequestInterface
-     */
-    private function getLastRequest()
+    private function getLastRequest(): RequestInterface
     {
-        if (!self::$history || empty(self::$history)) {
+        if (empty(self::$history)) {
             return null;
         }
 
@@ -244,12 +236,9 @@ class ApiTestCase extends KernelTestCase
         return $last['request'];
     }
 
-    /**
-     * @return ResponseInterface
-     */
-    private function getLastResponse()
+    private function getLastResponse(): ResponseInterface
     {
-        if (!self::$history || empty(self::$history)) {
+        if (empty(self::$history)) {
             return null;
         }
 
@@ -276,7 +265,7 @@ class ApiTestCase extends KernelTestCase
         return $user;
     }
 
-    protected function getAuthorizedHeaders($username, $headers = array())
+    protected function getAuthorizedHeaders($username, $headers = [])
     {
         $token = $this->getService('lexik_jwt_authentication.encoder')
             ->encode(['username' => $username]);
@@ -285,18 +274,6 @@ class ApiTestCase extends KernelTestCase
 
         return $headers;
     }
-
-//    protected function createProject($name)
-//    {
-//        $project = new Project();
-//        $project->setName($name);
-//        $project->setDifficultyLevel(rand(1, 10));
-//
-//        $this->getEntityManager()->persist($project);
-//        $this->getEntityManager()->flush();
-//
-//        return $project;
-//    }
 
     /**
      * @return ResponseAsserter
