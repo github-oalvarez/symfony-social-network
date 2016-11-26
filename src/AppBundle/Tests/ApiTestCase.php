@@ -280,27 +280,7 @@ class ApiTestCase extends KernelTestCase
                 $this->printDebug('HTML Summary (h1 and h2):');
             }
 
-            // finds the h1 and h2 tags and prints them only
-            foreach ($crawler->filter('h1, h2')->extract(['_text']) as $header) {
-                // avoid these meaningless headers
-                if (strpos($header, 'Stack Trace') !== false) {
-                    continue;
-                }
-                if (strpos($header, 'Logs') !== false) {
-                    continue;
-                }
-
-                // remove line breaks so the message looks nice
-                $header = str_replace("\n", ' ', trim($header));
-                // trim any excess whitespace "foo   bar" => "foo bar"
-                $header = preg_replace('/(\s)+/', ' ', $header);
-
-                if ($isError) {
-                    $this->printErrorBlock($header);
-                } else {
-                    $this->printDebug($header);
-                }
-            }
+            $this->printHeaderTags($crawler, $isError);
 
             $profilerUrl = $response->getHeader('X-Debug-Token-Link');
             if (!empty($profilerUrl)) {
@@ -316,6 +296,32 @@ class ApiTestCase extends KernelTestCase
             $this->printDebug('');
         } else {
             $this->printDebug($body);
+        }
+
+        return;
+    }
+
+    private function printHeaderTags(Crawler $crawler, bool $isError): void
+    {
+        foreach ($crawler->filter('h1, h2')->extract(['_text']) as $header) {
+            // avoid these meaningless headers
+            if (strpos($header, 'Stack Trace') !== false) {
+                continue;
+            }
+            if (strpos($header, 'Logs') !== false) {
+                continue;
+            }
+
+            // remove line breaks so the message looks nice
+            $header = str_replace("\n", ' ', trim($header));
+            // trim any excess whitespace "foo   bar" => "foo bar"
+            $header = preg_replace('/(\s)+/', ' ', $header);
+
+            if ($isError) {
+                $this->printErrorBlock($header);
+            } else {
+                $this->printDebug($header);
+            }
         }
 
         return;
