@@ -1,7 +1,7 @@
 <?php
-namespace AppBundle\Tests\Controller\User;
+namespace Tests\AppBundle\Controller\User;
 
-use AppBundle\Tests\ApiTestCase;
+use Tests\AppBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 final class DetailsControllerTest extends ApiTestCase

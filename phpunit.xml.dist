@@ -5,7 +5,7 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="vendor/autoload.php"
+         bootstrap="app/autoload.php"
 >
     <php>
         <ini name="error_reporting" value="-1" />
@@ -15,7 +15,7 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>src/AppBundle/Tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
@@ -23,10 +23,7 @@
         <whitelist>
             <directory>src</directory>
             <exclude>
-                <directory>./vendor</directory>
-                <directory>./app/Resources</directory>
-                <directory>./src/AppBundle/Resources</directory>
-                <directory>./src/AppBundle/Tests</directory>
+                <directory>vendor</directory>
             </exclude>
         </whitelist>
     </filter>
