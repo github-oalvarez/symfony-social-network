@@ -26,6 +26,7 @@
                 <directory>./vendor</directory>
                 <directory>./app/Resources</directory>
                 <directory>./src/AppBundle/Resources</directory>
+                <directory>./src/AppBundle/Tests</directory>
             </exclude>
         </whitelist>
     </filter>
