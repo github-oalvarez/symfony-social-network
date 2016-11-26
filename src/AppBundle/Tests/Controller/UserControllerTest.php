@@ -24,7 +24,7 @@ final class UserControllerTest extends \PHPUnit_Framework_TestCase
         $this->markTestSkipped();
 
         $userId = 1;
-        $response = $this->client->get('/users/' . $userId);
+        $response = $this->client->get('/users/'.$userId);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertNotEmpty($response->getBody());
@@ -64,7 +64,7 @@ final class UserControllerTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $response = $this->client->post('/users/' . $userId . '/connections', [
+        $response = $this->client->post('/users/'.$userId.'/connections', [
             'body' => json_encode($data)
         ]);
 

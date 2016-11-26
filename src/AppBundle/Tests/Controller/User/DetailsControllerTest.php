@@ -22,7 +22,7 @@ final class DetailsControllerTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $userId = 1;
-        $response = $this->client->get('/users/' . $userId);
+        $response = $this->client->get('/users/'.$userId);
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertNotEmpty($response->getBody());

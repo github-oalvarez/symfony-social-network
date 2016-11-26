@@ -13,7 +13,6 @@ use FOS\UserBundle\Doctrine\UserManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 final class UserController
@@ -126,12 +125,18 @@ final class UserController
         return View::create($form, Response::HTTP_BAD_REQUEST);
     }
 
+    /**
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     */
     private function saveUser($user)
     {
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
 
+    /**
+     * @param Relationship $relationship
+     */
     private function saveRelationship($relationship)
     {
         $this->entityManager->persist($relationship);
