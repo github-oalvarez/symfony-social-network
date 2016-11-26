@@ -5,7 +5,7 @@ use AppBundle\Entity\Relationship;
 use AppBundle\Entity\User;
 use AppBundle\Form\RelationshipType;
 use AppBundle\Repository\UserRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use FOS\UserBundle\Doctrine\UserManager;
@@ -32,26 +32,34 @@ final class UserController
     private $formFactory;
 
     /**
-     * @var EntityManager
+     * @var ManagerRegistry
      */
-    private $entityManager;
+    private $managerRegistry;
 
     /**
      * @var RouterInterface
      */
     private $router;
 
+    /**
+     * UserController constructor.
+     * @param UserRepository $userRepository
+     * @param UserManager $userManager
+     * @param FormFactoryInterface $formFactory
+     * @param ManagerRegistry $managerRegistry
+     * @param RouterInterface $router
+     */
     public function __construct(
         UserRepository $userRepository,
         UserManager $userManager,
         FormFactoryInterface $formFactory,
-        EntityManager $entityManager,
+        ManagerRegistry $managerRegistry,
         RouterInterface $router
     ) {
         $this->userRepository = $userRepository;
         $this->userManager = $userManager;
         $this->formFactory = $formFactory;
-        $this->entityManager = $entityManager;
+        $this->managerRegistry = $managerRegistry;
         $this->router = $router;
     }
 
@@ -61,7 +69,7 @@ final class UserController
      */
     public function getUserConnectionsAction($userId)
     {
-        $user = $this->entityManager
+        $user = $this->managerRegistry->getManager()
             ->getRepository('AppBundle:User')
             ->findOneBy(['id' => $userId]);
 
@@ -98,7 +106,7 @@ final class UserController
 
     private function saveRelationship($relationship)
     {
-        $this->entityManager->persist($relationship);
-        $this->entityManager->flush();
+        $this->managerRegistry->getManager()->persist($relationship);
+        $this->managerRegistry->getManager()->flush();
     }
 }

@@ -3,6 +3,7 @@ namespace AppBundle\Controller\User;
 
 use AppBundle\Form\UserType;
 use AppBundle\Repository\UserRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -30,9 +31,9 @@ final class CreateController
     private $formFactory;
 
     /**
-     * @var EntityManager
+     * @var ManagerRegistry
      */
-    private $entityManager;
+    private $managerRegistry;
 
     /**
      * @var UrlGeneratorInterface
@@ -43,13 +44,13 @@ final class CreateController
         UserRepository $userRepository,
         UserManager $userManager,
         FormFactoryInterface $formFactory,
-        EntityManager $entityManager,
+        ManagerRegistry $managerRegistry,
         UrlGeneratorInterface $urlGenerator
     ) {
         $this->userRepository = $userRepository;
         $this->userManager = $userManager;
         $this->formFactory = $formFactory;
-        $this->entityManager = $entityManager;
+        $this->managerRegistry = $managerRegistry;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -65,8 +66,8 @@ final class CreateController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $this->managerRegistry->getManager()->persist($user);
+            $this->managerRegistry->getManager()->flush();
 
             $response = new Response();
             $response->setStatusCode(Response::HTTP_CREATED);

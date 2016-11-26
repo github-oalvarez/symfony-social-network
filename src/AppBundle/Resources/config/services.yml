@@ -25,7 +25,7 @@ services:
             - '@user_repository'
             - '@fos_user.user_manager'
             - '@form.factory'
-            - '@doctrine.orm.entity_manager'
+            - '@doctrine'
             - '@router'
 
     # repositories
