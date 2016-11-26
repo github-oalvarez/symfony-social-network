@@ -18,7 +18,6 @@ services:
         arguments:
             - '@jms_serializer'
             - '@user_repository'
-            - '@fos_user.user_manager'
             - '@form.factory'
             - '@doctrine'
             - '@router'

@@ -6,7 +6,6 @@ use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use AppBundle\Repository\UserRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use FOS\UserBundle\Doctrine\UserManager;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -20,11 +19,6 @@ final class CreateController extends BaseController
      * @var UserRepository
      */
     private $userRepository;
-
-    /**
-     * @var UserManager
-     */
-    private $userManager;
 
     /**
      * @var FormFactoryInterface
@@ -44,14 +38,12 @@ final class CreateController extends BaseController
     public function __construct(
         SerializerInterface $serializer,
         UserRepository $userRepository,
-        UserManager $userManager,
         FormFactoryInterface $formFactory,
         ManagerRegistry $managerRegistry,
         UrlGeneratorInterface $urlGenerator
     ) {
         parent::__construct($serializer);
         $this->userRepository = $userRepository;
-        $this->userManager = $userManager;
         $this->formFactory = $formFactory;
         $this->managerRegistry = $managerRegistry;
         $this->urlGenerator = $urlGenerator;
