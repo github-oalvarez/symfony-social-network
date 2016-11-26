@@ -1,24 +1,11 @@
 <?php
 namespace AppBundle\Tests\Controller\User;
 
-use GuzzleHttp\Client;
+use AppBundle\Tests\Controller\TestBase;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CreateControllerTest extends \PHPUnit_Framework_TestCase
+final class CreateControllerTest extends TestBase
 {
-    /**
-     * @var Client
-     */
-    private $client;
-
-    public function setUp()
-    {
-        $this->client = new Client([
-            'base_uri' => 'http://localhost:8000',
-            'http_errors' => false,
-        ]);
-    }
-
     public function testPost()
     {
         $data = [
