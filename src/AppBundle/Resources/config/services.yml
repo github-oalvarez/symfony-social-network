@@ -5,7 +5,7 @@ services:
         arguments:
             - '@jms_serializer'
             - '@user_repository'
-            - '@router'
+            - '@pagination_factory'
 
     user_controller.details:
         class: AppBundle\Controller\User\DetailsController
@@ -28,3 +28,9 @@ services:
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments:
             - AppBundle\Entity\User
+
+    # factories
+    pagination_factory:
+        class: AppBundle\Pagination\PaginationFactory
+        arguments:
+            - '@router'
