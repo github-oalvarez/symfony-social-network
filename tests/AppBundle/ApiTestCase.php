@@ -176,7 +176,7 @@ class ApiTestCase extends KernelTestCase
         return $last['request'];
     }
 
-    private function getLastResponse(): ResponseInterface
+    private function getLastResponse()
     {
         if (empty(self::$history)) {
             return null;
@@ -260,7 +260,7 @@ class ApiTestCase extends KernelTestCase
         }
     }
 
-    private function printHtml(ResponseInterface $response, $body): void
+    private function printHtml(ResponseInterface $response, $body)
     {
         $isValidHtml = strpos($body, '</body>') !== false;
 
@@ -299,7 +299,7 @@ class ApiTestCase extends KernelTestCase
         return;
     }
 
-    private function printHeaderTags(Crawler $crawler, bool $isError): void
+    private function printHeaderTags(Crawler $crawler, bool $isError)
     {
         foreach ($crawler->filter('h1, h2')->extract(['_text']) as $header) {
             // avoid these meaningless headers
