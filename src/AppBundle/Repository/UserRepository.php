@@ -2,12 +2,12 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use AppBundle\Entity\User;
 
 class UserRepository extends EntityRepository implements UserProviderInterface
 {
@@ -73,8 +73,15 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         return $class === 'AppBundle\Entity\User';
     }
 
-    public function findAllQueryBuilder()
+    public function findAllQueryBuilder($filter = '')
     {
-        return $this->createQueryBuilder('user');
+        $queryBuilder = $this->createQueryBuilder('user');
+
+        if ($filter) {
+            $queryBuilder->andWhere('user.name LIKE :filter')
+                ->setParameter('filter', '%'.$filter.'%');
+        }
+
+        return $queryBuilder;
     }
 }

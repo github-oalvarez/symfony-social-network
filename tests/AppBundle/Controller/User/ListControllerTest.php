@@ -1,8 +1,8 @@
 <?php
 namespace Tests\AppBundle\Controller\User;
 
-use Tests\AppBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\AppBundle\ApiTestCase;
 
 final class ListControllerTest extends ApiTestCase
 {
@@ -16,11 +16,13 @@ final class ListControllerTest extends ApiTestCase
 
     public function testGetPagination()
     {
+        $this->createUser('Unknown', uniqid());
+
         for ($i = 0; $i < 25; $i++) {
             $this->createUser('User'.$i, uniqid());
         }
 
-        $response = $this->client->get('/users');
+        $response = $this->client->get('/users?filter=user');
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->asserter()->assertResponsePropertyEquals(
             $response,

@@ -248,7 +248,7 @@ class ApiTestCase extends KernelTestCase
         return '/app_test.php'.$uri;
     }
 
-    private function printJson($body): void
+    private function printJson($body)
     {
         $data = json_decode($body);
         if ($data === null) {
@@ -258,8 +258,6 @@ class ApiTestCase extends KernelTestCase
             // valid JSON, print it pretty
             $this->printDebug(json_encode($data, JSON_PRETTY_PRINT));
         }
-
-        return;
     }
 
     private function printHtml(ResponseInterface $response, $body): void

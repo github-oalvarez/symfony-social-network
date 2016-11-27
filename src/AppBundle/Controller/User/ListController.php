@@ -32,7 +32,9 @@ final class ListController extends BaseController
 
     public function getAction(Request $request)
     {
-        $queryBuilder = $this->userRepository->findAllQueryBuilder();
+        $filter = $request->query->get('filter');
+
+        $queryBuilder = $this->userRepository->findAllQueryBuilder($filter);
 
         $paginatedCollection = $this->paginationFactory->createCollection(
             $queryBuilder, $request, $request->get('_route')
