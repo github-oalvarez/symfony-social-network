@@ -2,12 +2,14 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @Serializer\ExclusionPolicy("all")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table("users")
  */
@@ -21,12 +23,21 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @Serializer\Expose()
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      */
     private $name;
 
     /**
+     * @Serializer\Expose()
+     * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     */
+    private $username;
+
+    /**
+     * @Serializer\Expose()
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      * @Assert\Email()
@@ -88,6 +99,22 @@ class User implements UserInterface
     /**
      * @return mixed
      */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getEmail()
     {
         return $this->email;
@@ -137,16 +164,6 @@ class User implements UserInterface
         // the salt value is built-in and you don't have to generate one
 
         return;
-    }
-
-    /**
-     * Returns the username used to authenticate the user.
-     *
-     * @return string The username
-     */
-    public function getUsername()
-    {
-        return $this->getEmail();
     }
 
     /**

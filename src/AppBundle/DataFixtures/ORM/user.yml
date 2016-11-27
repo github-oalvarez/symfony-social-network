@@ -1,6 +1,7 @@
 AppBundle\Entity\User:
     user_{1..50}:
         name: <name()>
+        username: <username()>
         email: <email()>
         password: <password()>
         userGroup: ['@user_group_*']
