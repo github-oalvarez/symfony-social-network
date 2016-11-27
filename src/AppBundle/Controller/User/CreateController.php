@@ -62,7 +62,7 @@ final class CreateController extends BaseController
 
         $userUrl = $this->urlGenerator->generate(
             'user_list',
-            ['userId' => $user->getId()]
+            ['username' => $user->getUsername()]
         );
         $response->headers->set('Location', $userUrl);
 

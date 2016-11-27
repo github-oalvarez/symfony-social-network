@@ -1,8 +1,8 @@
 <?php
 namespace Tests\AppBundle\Controller\User;
 
-use Tests\AppBundle\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\AppBundle\ApiTestCase;
 
 final class CreateControllerTest extends ApiTestCase
 {
@@ -10,6 +10,7 @@ final class CreateControllerTest extends ApiTestCase
     {
         $data = [
             'name' => 'John Smith',
+            'username' => 'john_smith',
             'email' => 'john_smith@example.com',
             'password' => '$2a$10$eImiTXuWVxfM37uY4JANjQ',
         ];

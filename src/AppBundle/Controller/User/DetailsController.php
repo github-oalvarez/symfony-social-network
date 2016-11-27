@@ -21,14 +21,14 @@ final class DetailsController extends BaseController
         $this->userRepository = $userRepository;
     }
 
-    public function getAction($userId)
+    public function getAction($username)
     {
-        $user = $this->userRepository->findOneBy(['id' => $userId]);
+        $user = $this->userRepository->findOneBy(['username' => $username]);
 
         if (!$user instanceof User) {
             throw new NotFoundHttpException(sprintf(
-                'No user found with id "%s"',
-                $userId
+                'No user found with username "%s"',
+                $username
             ));
         }
 

@@ -4,7 +4,7 @@ user_list:
     defaults: { _controller: user_controller.list:getAction }
 
 user_details:
-    path: /users/{userId}
+    path: /users/{username}
     defaults: { _controller: user_controller.details:getAction }
 
 user_create:

@@ -189,10 +189,12 @@ class ApiTestCase extends KernelTestCase
         return $last['response'];
     }
 
-    protected function createUser($username, $plainPassword = 'foo')
+    protected function createUser($name, $plainPassword = 'foo')
     {
         $user = new User();
-        $user->setName($username);
+        $user->setName($name);
+        $username = (str_replace(' ', '-', strtolower($name)));
+        $user->setUsername($username);
         $user->setEmail($username.'@foo.com');
         $password = $this->getService('security.password_encoder')
             ->encodePassword($user, $plainPassword);
