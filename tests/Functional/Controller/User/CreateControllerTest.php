@@ -1,8 +1,8 @@
 <?php
-namespace Tests\AppBundle\Controller\User;
+namespace Tests\Functional\Controller\User;
 
 use Symfony\Component\HttpFoundation\Response;
-use Tests\AppBundle\ApiTestCase;
+use Tests\Functional\ApiTestCase;
 
 final class CreateControllerTest extends ApiTestCase
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Tests\AppBundle;
+namespace Tests\Functional;
 
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\PropertyAccess\Exception\RuntimeException;
