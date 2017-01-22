@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/snoek09/meetup-api.svg?branch=master)](https://travis-ci.org/snoek09/meetup-api) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/snoek09/meetup-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/snoek09/meetup-api/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/snoek09/meetup-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/snoek09/meetup-api/?branch=master)
+[![Build Status](https://travis-ci.org/snoek09/symfony-social-network.svg?branch=master)](https://travis-ci.org/snoek09/symfony-social-network) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/snoek09/symfony-social-network/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/snoek09/symfony-social-network/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/snoek09/symfony-social-network/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/snoek09/symfony-social-network/?branch=master)
 
-meetup-api
-==========
+symfony-social-network
+======================
 
     * php bin/console doctrine:schema:create
     
