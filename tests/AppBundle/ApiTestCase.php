@@ -45,7 +45,7 @@ class ApiTestCase extends KernelTestCase
         $handler = HandlerStack::create();
 
         $handler->push(Middleware::history(self::$history));
-        $handler->push(Middleware::mapRequest(function(RequestInterface $request) {
+        $handler->push(Middleware::mapRequest(function (RequestInterface $request) {
             $path = $request->getUri()->getPath();
             if (strpos($path, '/app_test.php') !== 0) {
                 $path = '/app_test.php' . $path;

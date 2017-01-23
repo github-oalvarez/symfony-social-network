@@ -36,7 +36,7 @@ final class PaginationFactory
         $paginatedCollection = new PaginatedCollection($users, $pagerfanta->getNbResults());
 
         $routeParams = array_merge($routeParams, $request->query->all());
-        $createLinkUrl = function($targetPage) use ($route, $routeParams) {
+        $createLinkUrl = function ($targetPage) use ($route, $routeParams) {
             return $this->urlGenerator->generate($route, array_merge(
                 $routeParams,
                 ['page' => $targetPage]
